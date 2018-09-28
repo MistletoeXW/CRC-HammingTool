@@ -24,9 +24,7 @@ public class HamingService {
         Result result;
         try{
             Hamming hamming = new Hamming();
-            Map<String,String> ham = new HashMap();
-            ham.put("ham",hamming.getHaiMingCode(data));
-            ham.put("byte",data);
+            String ham = hamming.getHaiMingCode(data);
             result = ResultTool.success(ham);
         }catch (Exception e){
             result = ResultTool.error("生成海明码失败！");
