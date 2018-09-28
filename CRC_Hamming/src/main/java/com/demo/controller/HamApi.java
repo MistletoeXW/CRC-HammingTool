@@ -28,4 +28,11 @@ public class HamApi {
     public Result getHaming(@RequestParam(value = "dataStr") String dataStr){
         return hamingService.getHam(dataStr);
     }
+
+    @PostMapping("/checkHam")
+    @ApiOperation(value = "纠错海明码", httpMethod = "POST")
+    public Result checkHaming(@RequestParam(value = "dataStar") String dataStr){
+        return hamingService.checkHam(dataStr);
+    }
+
 }

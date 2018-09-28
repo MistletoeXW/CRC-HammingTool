@@ -2,7 +2,6 @@ package com.demo.service;
 
 import com.demo.OV.Result;
 import com.demo.OV.ResultTool;
-import com.demo.tools.CodeTool;
 import com.demo.tools.Hamming;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +19,8 @@ public class HamingService {
 
 
 
-    public Result getHam(String datastr){
-        CodeTool codeTool = new CodeTool();
-        String data = codeTool.strToByte(datastr);
+    public Result getHam(String data){
+
         Result result;
         try{
             Hamming hamming = new Hamming();
@@ -32,6 +30,17 @@ public class HamingService {
             result = ResultTool.success(ham);
         }catch (Exception e){
             result = ResultTool.error("生成海明码失败！");
+        }
+        return result;
+    }
+
+    public Result checkHam(String data){
+        Result result;
+        try{
+            Hamming hamming = new Hamming();
+            result = ResultTool.success(hamming.check(data));
+        }catch (Exception e){
+            result = ResultTool.error("纠错失败!");
         }
         return result;
     }

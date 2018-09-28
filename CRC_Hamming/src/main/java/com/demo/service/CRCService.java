@@ -21,7 +21,7 @@ public class CRCService {
         Result result;
         try{
             CRC Crc = new CRC();
-            Map<String,String> crc = new HashMap();
+            Map<String,String> crc = new HashMap<String, String>();
             crc.put("crc",Crc.getCRC(dataStr,gxStr));
             crc.put("byte",dataStr);
             result = ResultTool.success(crc);
