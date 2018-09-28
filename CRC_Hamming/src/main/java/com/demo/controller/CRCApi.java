@@ -30,7 +30,7 @@ public class CRCApi {
                          @RequestParam(value = "gxStr") String gxStr){
         CRC crc = new CRC();
         String datastr = crc.strToByte(data);
-        return crcService.getCrcStr(data,gxStr);
+        return crcService.getCrcStr(datastr,gxStr);
     }
 
     @PostMapping("/checkCRC")
