@@ -22,8 +22,8 @@ public class CRCService {
         try{
             CRC Crc = new CRC();
             Map<String,String> crc = new HashMap();
-            crc.put("dataStr",Crc.getCRC(dataStr,gxStr));
-            crc.put("byte",Crc.strToByte(dataStr));
+            crc.put("crc",Crc.getCRC(dataStr,gxStr));
+            crc.put("byte",dataStr);
             result = ResultTool.success(crc);
         }catch (Exception e){
             result = ResultTool.error("生成CRC失败！");

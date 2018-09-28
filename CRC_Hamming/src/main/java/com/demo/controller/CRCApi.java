@@ -38,6 +38,8 @@ public class CRCApi {
     public Result checkCrc(@RequestParam(value = "dataStr")String dataStr,
                            @RequestParam(value = "gxStr")String gxStr,
                            @RequestParam(value = "crc")String crc){
+
+
         return crcService.checkCRC(dataStr,gxStr,crc);
     }
 
