@@ -32,10 +32,10 @@ public class CRCApi {
 
     @PostMapping("/checkCRC")
     @ApiOperation(value = "CRC校验",httpMethod = "POST")
-    public Result checkCrc(@RequestParam(value = "data")String data,
+    public Result checkCrc(@RequestParam(value = "dataStr")String dataStr,
                            @RequestParam(value = "gxStr")String gxStr,
                            @RequestParam(value = "crc")String crc){
-        return crcService.checkCRC(data,gxStr,crc);
+        return crcService.checkCRC(dataStr,gxStr,crc);
     }
 
 

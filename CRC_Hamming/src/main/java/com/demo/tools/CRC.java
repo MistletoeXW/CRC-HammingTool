@@ -24,38 +24,42 @@ public class CRC {
     public String getCRC(String dataStr,String gxStr){
 
         //获取二进制帧的位数
-        Integer dataStrLen = dataStr.length();
+        int dataStrLen = dataStr.length();
         //获取多项式位数
-        Integer gxStrLen = gxStr.length();
+        int gxStrLen = gxStr.length();
         //将二进制的字符串变为整型
-        Integer data = Integer.parseInt(dataStr,2);
+        BigInteger data = byteToBigInter(dataStr);
         //将多项式的字符串变为整型
-        Integer gx = Integer.parseInt(gxStr,2);
+        BigInteger gx = byteToBigInter(gxStr);
         //算出原始数据补零后的总位数
         Integer sum = dataStrLen+gxStrLen-1;
         //计算2的sum-1次幂
         BigInteger bi = new BigInteger("2");
         //将2的sum-1次幂转换为int型
-        Integer flag = bi.pow(sum-1).intValue();
+        BigInteger flag = bi.pow(sum-1);
         //原始帧低位补零
-        data = data<<(gxStrLen-1);
-        //多项式低位补零,使其与补零后的帧位数一致，以便异或
-        gx = gx<<(dataStrLen-1);
+        data = data.multiply(new BigInteger("2").pow(gxStrLen-1));
+       //多项式低位补零,使其与补零后的帧位数一致，以便异或
+        gx = gx.multiply(new BigInteger("2").pow(dataStrLen-1));
         //循环dataStrLen次
         for(int i=0; i<(dataStrLen);i++){
             //判断补零后的帧最高位为1还是零
-            if((data&flag)!=0) {
-                data = data^gx;
-                gx = gx>>1;
+            if((data.and(flag)).compareTo(new BigInteger("0")) !=0 ) {
+                data = data.xor(gx);
+                gx = gx.divide(new BigInteger("2"));
             }else {
-                gx = gx>>1;
+                gx = gx.divide(new BigInteger("2"));
             }
             //flag最高位的1右移
-            flag = flag>>1;
+            flag = flag.divide(new BigInteger("2"));
         }
-        String crc = Integer.toBinaryString(data);
-
-        return crc;
+        String crcint = Integer.toBinaryString(data.intValue());
+        String str="";
+        if(crcint.length()< gxStrLen-1){
+            for (int i=0;i<(gxStrLen-1-crcint.length());i++)
+                str = str + "0";
+        }
+        return str+crcint;
     }
 
 
@@ -67,63 +71,55 @@ public class CRC {
      * @Date: 18-9-27
      */
     public boolean CRCCheck(String data,String gxStr,String crc){
-        String datastr = data + crc;
-        if(getCRC(datastr,gxStr).equals("0"))
+        String datastr = strToByte(data) + crc;
+        String str="";
+        for (int i=0;i<(gxStr.length()-1);i++)
+            str = str + "0";
+        if(getCRC(datastr,gxStr).equals(str))
             return true;
         else
             return false;
     }
 
-
     /**
-     *
-     * @param
-     * @return 二进制数组转换为二进制字符串   2-2
-     */
-    private  String bytes2BinStr(byte[] bArray){
-
-        String outStr = "";
-        int pos = 0;
-        for(byte b:bArray){
-            //高四位
-            pos = (b&0xF0)>>4;
-            outStr += binaryArray[pos];
-            //低四位
-            pos=b&0x0F;
-            outStr+=binaryArray[pos];
-        }
-        return outStr;
-    }
-
-    /**
-     *
-     * @param hexString
-     * @return 将十六进制转换为二进制字节数组   16-2
-     */
-    private  byte[] hexStr2BinArr(String hexString){
-        //hexString的长度对2取整，作为bytes的长度
-        int len = hexString.length()/2;
-        byte[] bytes = new byte[len];
-        byte high = 0;//字节高四位
-        byte low = 0;//字节低四位
-        for(int i=0;i<len;i++){
-            //右移四位得到高位
-            high = (byte)((hexStr.indexOf(hexString.charAt(2*i)))<<4);
-            low = (byte)hexStr.indexOf(hexString.charAt(2*i+1));
-            bytes[i] = (byte) (high|low);//高地位做或运算
-        }
-        return bytes;
-    }
-
-    /**
-     * @Description: 十六进制转二进制
+     * @Description: 二进制生字符串生成BigInteger
      * @Param:
      * @Return:
      * @Author: xw
-     * @Date: 18-9-27
+     * @Date: 18-9-28
      */
-    public String hexStr2BinStr(String hexString){
-        return bytes2BinStr(hexStr2BinArr(hexString));
+    public BigInteger byteToBigInter(String str){
+
+        char [] nums = new StringBuffer(str).reverse().toString().toCharArray();
+
+        BigInteger sum = new BigInteger("0");
+        BigInteger b1 = new BigInteger(String.valueOf(nums[0]));
+        BigInteger b2 = new BigInteger("2");
+        BigInteger b3 = new BigInteger("1");
+        sum = sum.add(b1);
+        for(int i=1;i<nums.length;i++){
+            b1 = new BigInteger(String.valueOf(nums[i]));
+            sum = sum.add(b1.multiply(b2.multiply(b3)));
+            b3 = b3.multiply(b2);
+        }
+        return sum;
+    }
+
+    
+    /**
+     * @Description: 字符串转为二进制字符串
+     * @Param: 
+     * @Return: 
+     * @Author: xw
+     * @Date: 18-9-28
+     */
+    public String strToByte(String str){
+        char[] strChar=str.toCharArray();
+        StringBuffer stringBuffer = new StringBuffer();
+        for(int i=0;i<strChar.length;i++){
+            stringBuffer.append(Integer.toBinaryString(strChar[i]));
+        }
+        return stringBuffer.toString();
     }
 
 

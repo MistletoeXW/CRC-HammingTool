@@ -5,6 +5,9 @@ import com.demo.OV.ResultTool;
 import com.demo.tools.CRC;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @program: CRCTool
  * @description:
@@ -18,7 +21,9 @@ public class CRCService {
         Result result;
         try{
             CRC Crc = new CRC();
-            String crc = Crc.getCRC(dataStr,gxStr);
+            Map<String,String> crc = new HashMap();
+            crc.put("dataStr",Crc.getCRC(dataStr,gxStr));
+            crc.put("byte",Crc.strToByte(dataStr));
             result = ResultTool.success(crc);
         }catch (Exception e){
             result = ResultTool.error("生成CRC失败！");
