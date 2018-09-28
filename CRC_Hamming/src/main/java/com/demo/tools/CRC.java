@@ -14,7 +14,6 @@ public class CRC {
     private static String[] binaryArray =
             {"0000","0001","0010","0011", "0100","0101","0110","0111", "1000","1001","1010","1011", "1100","1101","1110","1111"};
 
-    private CodeTool codeTool;
     /**
      * @Description: CRC校验码的生成
      * @Param: dataStr、gxStr
@@ -24,6 +23,7 @@ public class CRC {
     */
     public String getCRC(String dataStr,String gxStr){
 
+        CodeTool codeTool = new CodeTool();
         //获取二进制帧的位数
         int dataStrLen = dataStr.length();
         //获取多项式位数
@@ -72,6 +72,7 @@ public class CRC {
      * @Date: 18-9-27
      */
     public boolean CRCCheck(String data,String gxStr,String crc){
+        CodeTool codeTool = new CodeTool();
         String datastr = codeTool.strToByte(data) + crc;
         String str="";
         for (int i=0;i<(gxStr.length()-1);i++)
