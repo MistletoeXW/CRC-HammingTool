@@ -3,6 +3,7 @@ package com.demo.controller;
 import com.demo.OV.Result;
 import com.demo.service.CRCService;
 import com.demo.tools.CRC;
+import com.demo.tools.CodeTool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,8 @@ public class CRCApi {
     @ApiOperation(value = "获取CRC", httpMethod = "POST")
     public Result getCrc(@RequestParam(value = "data") String data,
                          @RequestParam(value = "gxStr") String gxStr){
-        CRC crc = new CRC();
-        String datastr = crc.strToByte(data);
+        CodeTool codeTool = new CodeTool();
+        String datastr = codeTool.strToByte(data);
         return crcService.getCrcStr(datastr,gxStr);
     }
 
@@ -38,7 +39,6 @@ public class CRCApi {
     public Result checkCrc(@RequestParam(value = "dataStr")String dataStr,
                            @RequestParam(value = "gxStr")String gxStr,
                            @RequestParam(value = "crc")String crc){
-
 
         return crcService.checkCRC(dataStr,gxStr,crc);
     }

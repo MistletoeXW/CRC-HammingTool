@@ -3,12 +3,6 @@ package com.demo.tools;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.print.DocFlavor;
-
-import java.math.BigInteger;
-import java.util.Scanner;
-
-import static org.junit.Assert.*;
 
 
 @SpringBootTest
@@ -17,8 +11,9 @@ public class CRCTest {
 
     @Test
     public void getCRC(){
+        CodeTool codeTool = new CodeTool();
         CRC crc = new CRC();
-        String data = crc.strToByte("1aasaasasz");
+        String data = codeTool.strToByte("1aasaasasz");
         System.out.print(crc.getCRC(data,"11001"));
 
     }

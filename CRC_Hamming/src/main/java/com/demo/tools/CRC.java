@@ -14,6 +14,7 @@ public class CRC {
     private static String[] binaryArray =
             {"0000","0001","0010","0011", "0100","0101","0110","0111", "1000","1001","1010","1011", "1100","1101","1110","1111"};
 
+    private CodeTool codeTool;
     /**
      * @Description: CRC校验码的生成
      * @Param: dataStr、gxStr
@@ -28,9 +29,9 @@ public class CRC {
         //获取多项式位数
         int gxStrLen = gxStr.length();
         //将二进制的字符串变为整型
-        BigInteger data = byteToBigInter(dataStr);
+        BigInteger data = codeTool.byteToBigInter(dataStr);
         //将多项式的字符串变为整型
-        BigInteger gx = byteToBigInter(gxStr);
+        BigInteger gx = codeTool.byteToBigInter(gxStr);
         //算出原始数据补零后的总位数
         Integer sum = dataStrLen+gxStrLen-1;
         //计算2的sum-1次幂
@@ -71,7 +72,7 @@ public class CRC {
      * @Date: 18-9-27
      */
     public boolean CRCCheck(String data,String gxStr,String crc){
-        String datastr = strToByte(data) + crc;
+        String datastr = codeTool.strToByte(data) + crc;
         String str="";
         for (int i=0;i<(gxStr.length()-1);i++)
             str = str + "0";
@@ -81,46 +82,7 @@ public class CRC {
             return false;
     }
 
-    /**
-     * @Description: 二进制生字符串生成BigInteger
-     * @Param:
-     * @Return:
-     * @Author: xw
-     * @Date: 18-9-28
-     */
-    public BigInteger byteToBigInter(String str){
 
-        char [] nums = new StringBuffer(str).reverse().toString().toCharArray();
-
-        BigInteger sum = new BigInteger("0");
-        BigInteger b1 = new BigInteger(String.valueOf(nums[0]));
-        BigInteger b2 = new BigInteger("2");
-        BigInteger b3 = new BigInteger("1");
-        sum = sum.add(b1);
-        for(int i=1;i<nums.length;i++){
-            b1 = new BigInteger(String.valueOf(nums[i]));
-            sum = sum.add(b1.multiply(b2.multiply(b3)));
-            b3 = b3.multiply(b2);
-        }
-        return sum;
-    }
-
-    
-    /**
-     * @Description: 字符串转为二进制字符串
-     * @Param: 
-     * @Return: 
-     * @Author: xw
-     * @Date: 18-9-28
-     */
-    public String strToByte(String str){
-        char[] strChar=str.toCharArray();
-        StringBuffer stringBuffer = new StringBuffer();
-        for(int i=0;i<strChar.length;i++){
-            stringBuffer.append(Integer.toBinaryString(strChar[i]));
-        }
-        return stringBuffer.toString();
-    }
 
 
 }
